@@ -14,11 +14,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
     Button getCardsButton;
     static MainActivity instance;
     private String _baseUri = "https://api.gwentapi.com/v0/";
     private String cardsEndpoint = "cards";
+    private JSONObject cardsJson = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         //Setup broadcast receiver and intent service
         IntentFilter resultFilter = new IntentFilter(Constants.BROADCAST_ACTION);
         final CardResultReceiver receiver = new CardResultReceiver();
+
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, resultFilter);
 
         //Setup click event
@@ -56,6 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void getCardsCallback(String cardData) {
         Toast toast = Toast.makeText(getApplicationContext(), cardData, Toast.LENGTH_LONG);
+        toast.show();
+        try {
+            cardsJson = new JSONObject(cardData);
+            JSONArray cardArray = (JSONArray) cardsJson.get("results");
+
+            for (int i = 0; i < cardArray.length(); i++) {
+                // Get card info from results array
+                JSONObject card = cardArray.getJSONObject(i);
+                String[] split = card.get("href").toString().split(",");
+                CardInfo ci = new CardInfo(card.get("name").toString(), split[split.length - 1]);
+
+                // Get variation detail from card UUID
+
+            }
+        } catch (Exception ex) {
+        }
+    }
+    public void getVariationCallback(String variationData) {
+        Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
         toast.show();
     }
 

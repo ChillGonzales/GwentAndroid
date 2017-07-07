@@ -9,6 +9,8 @@ public final class Constants {
     public static final String BROADCAST_ACTION =
             "com.example.colin.gwentsite.BROADCAST";
     // Defines the key for the result "extra" in an Intent
-    public static final String EXTENDED_DATA_RESULT =
-            "com.example.colin.gwentsite.RESULT";
+    public static final String CARD_PAGE_RESULT =
+            "com.example.colin.gwentsite.CARDPAGE";
+    public static final String VARIATION_RESULT =
+            "com.example.colin.gwentsite.VARIATION";
 }
