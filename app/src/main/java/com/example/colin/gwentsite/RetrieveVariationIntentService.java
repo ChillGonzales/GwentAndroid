@@ -33,7 +33,7 @@ public class RetrieveVariationIntentService extends IntentService {
             */
             Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
                     // Puts the status into the Intent
-                    .putExtra(Constants.VARIATION_CARDPAGE, returnVal);
+                    .putExtra(Constants.VARIATION_RESULT, returnVal);
             // Broadcasts the Intent to receivers in this app.
             LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
         }

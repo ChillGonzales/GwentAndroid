@@ -11,6 +11,8 @@ import android.content.Intent;
 public class VariationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        MainActivity.getInstance().getVariationCallback((String) intent.getExtras().get(Constants.VARIATION_RESULT));
+        if (intent.getExtras().get(Constants.VARIATION_RESULT) != null) {
+            MainActivity.getInstance().getVariationCallback((String) intent.getExtras().get(Constants.VARIATION_RESULT));
+        }
     }
 }

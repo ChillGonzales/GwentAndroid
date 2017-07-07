@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     static MainActivity instance;
     private String _baseUri = "https://api.gwentapi.com/v0/";
     private String cardsEndpoint = "cards";
+    private String variationEndpoint = "variations";
     private JSONObject cardsJson = null;
 
     @Override
@@ -35,8 +36,10 @@ public class MainActivity extends AppCompatActivity {
         //Setup broadcast receiver and intent service
         IntentFilter resultFilter = new IntentFilter(Constants.BROADCAST_ACTION);
         final CardResultReceiver receiver = new CardResultReceiver();
+        final VariationReceiver varReceiver = new VariationReceiver();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, resultFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(varReceiver, resultFilter);
 
         //Setup click event
         getCardsButton = (Button) findViewById(R.id.getCardsButton);
@@ -69,11 +72,14 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < cardArray.length(); i++) {
                 // Get card info from results array
                 JSONObject card = cardArray.getJSONObject(i);
-                String[] split = card.get("href").toString().split(",");
+                String[] split = card.get("href").toString().split("/");
                 CardInfo ci = new CardInfo(card.get("name").toString(), split[split.length - 1]);
 
                 // Get variation detail from card UUID
-
+                Intent mVariationIntent = new Intent(MainActivity.this, RetrieveVariationIntentService.class);
+                mVariationIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "/" + ci.uuid + "/" + variationEndpoint));
+                MainActivity.this.startService(mVariationIntent);
+                break;
             }
         } catch (Exception ex) {
         }

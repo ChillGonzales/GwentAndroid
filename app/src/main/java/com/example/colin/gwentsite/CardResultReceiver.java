@@ -14,6 +14,8 @@ public class CardResultReceiver extends BroadcastReceiver {
     // Called when the BroadcastReceiver gets an Intent it's registered to receive
     @Override
     public void onReceive(Context context, Intent intent) {
-        MainActivity.getInstance().getCardsCallback((String) intent.getExtras().get(Constants.CARD_PAGE_RESULT));
+        if (intent.getExtras().get(Constants.CARD_PAGE_RESULT) != null) {
+            MainActivity.getInstance().getCardsCallback((String) intent.getExtras().get(Constants.CARD_PAGE_RESULT));
+        }
     }
 }
