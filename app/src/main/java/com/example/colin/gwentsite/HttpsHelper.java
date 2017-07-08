@@ -1,5 +1,9 @@
 package com.example.colin.gwentsite;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -32,6 +36,26 @@ public class HttpsHelper {
             return responseStrBuilder.toString();
         } catch (Exception e){
             return e.toString();
+        } finally {
+            apiConnection.disconnect();
+        }
+    }
+    public static Bitmap getHttpsImage(String connectionStr) {
+        HttpsURLConnection apiConnection = null;
+        try {
+            URL endPoint = new URL(connectionStr);
+            apiConnection = (HttpsURLConnection) endPoint.openConnection();
+            apiConnection.setRequestMethod("GET");
+            apiConnection.setRequestProperty("Accept","*/*");
+            apiConnection.connect();
+            if (apiConnection.getResponseCode() != 200) {
+                return null;
+            }
+            //BufferedReader streamReader = new BufferedReader(new InputStreamReader(apiConnection.getInputStream()));
+            Bitmap image = BitmapFactory.decodeStream(apiConnection.getInputStream());
+            return image;
+        } catch (Exception e){
+            return null;
         } finally {
             apiConnection.disconnect();
         }

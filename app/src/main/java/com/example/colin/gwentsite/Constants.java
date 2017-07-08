@@ -13,4 +13,6 @@ public final class Constants {
             "com.example.colin.gwentsite.CARDPAGE";
     public static final String VARIATION_RESULT =
             "com.example.colin.gwentsite.VARIATION";
+    public static final String ARTWORK_RESULT =
+            "com.example.colin.gwentsite.ARTWORK";
 }

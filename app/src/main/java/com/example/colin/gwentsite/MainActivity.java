@@ -3,6 +3,8 @@ package com.example.colin.gwentsite;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -37,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter resultFilter = new IntentFilter(Constants.BROADCAST_ACTION);
         final CardResultReceiver receiver = new CardResultReceiver();
         final VariationReceiver varReceiver = new VariationReceiver();
+        final ArtworkReceiver artworkReceiver = new ArtworkReceiver();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, resultFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(varReceiver, resultFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(artworkReceiver, resultFilter);
 
         //Setup click event
         getCardsButton = (Button) findViewById(R.id.getCardsButton);
@@ -85,8 +90,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void getVariationCallback(String variationData) {
-        Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
+            toast.show();
+            JSONArray arr = new JSONArray(variationData);
+            // Get artwork data from variation
+            Intent mArtworkIntent = new Intent(MainActivity.this, RetrieveArtworkIntentService.class);
+            JSONObject art = new JSONObject(arr.getJSONObject(0).get("art").toString());
+            mArtworkIntent.setData(Uri.parse(art.get("thumbnailImage").toString()));
+            MainActivity.this.startService(mArtworkIntent);
+        } catch (Exception e)
+        {
+        }
+    }
+    public void getArtworkCallback(Bitmap artData) {
+        ImageView img = (ImageView) findViewById(R.id.cardArt);
+        img.setImageBitmap(artData);
     }
 
     @Override

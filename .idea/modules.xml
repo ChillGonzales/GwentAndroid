@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GwentAndroid.iml" filepath="$PROJECT_DIR$/GwentAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GwentSite.iml" filepath="$PROJECT_DIR$/GwentSite.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
