@@ -20,6 +20,12 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity {
     Button getCardsButton;
     static MainActivity instance;
@@ -81,10 +87,32 @@ public class MainActivity extends AppCompatActivity {
                 CardInfo ci = new CardInfo(card.get("name").toString(), split[split.length - 1]);
 
                 // Get variation detail from card UUID
-                Intent mVariationIntent = new Intent(MainActivity.this, RetrieveVariationIntentService.class);
-                mVariationIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "/" + ci.uuid + "/" + variationEndpoint));
-                MainActivity.this.startService(mVariationIntent);
-                break;
+                //Intent mVariationIntent = new Intent(MainActivity.this, RetrieveVariationIntentService.class);
+                //mVariationIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "/" + ci.uuid + "/" + variationEndpoint));
+                //MainActivity.this.startService(mVariationIntent);
+                //break;
+
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                URL url = classLoader.getResource("src/main/assets/" + ci.uuid + ".info");
+                File file = new File(url.toURI());
+
+                //Read text from file
+                StringBuilder text = new StringBuilder();
+
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                    getVariationCallback(text.toString());
+                }
+                catch (IOException e) {
+                    //You'll need to add proper error handling here
+                }
             }
         } catch (Exception ex) {
         }
