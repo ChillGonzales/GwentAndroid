@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,7 +25,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button getCardsButton;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private String cardsEndpoint = "cards";
     private String variationEndpoint = "variations";
     private JSONObject cardsJson = null;
+    private ArrayList<Bitmap> images = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getCardsCallback(String cardData) {
-        Toast toast = Toast.makeText(getApplicationContext(), cardData, Toast.LENGTH_LONG);
-        toast.show();
+        //Toast toast = Toast.makeText(getApplicationContext(), cardData, Toast.LENGTH_LONG);
+        //toast.show();
         try {
             cardsJson = new JSONObject(cardData);
             JSONArray cardArray = (JSONArray) cardsJson.get("results");
@@ -92,15 +97,16 @@ public class MainActivity extends AppCompatActivity {
                 //MainActivity.this.startService(mVariationIntent);
                 //break;
 
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                URL url = classLoader.getResource("src/main/assets/" + ci.uuid + ".info");
-                File file = new File(url.toURI());
+                //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                //URL url = classLoader.getResource("./src/main/assets/" + ci.uuid + ".info");
+                //File file = new File("C:\\Users\\Colin\\Documents\\src\\GwentSite\\app\\src\\main\\assets\\" + ci.uuid + ".vrtn");
 
                 //Read text from file
                 StringBuilder text = new StringBuilder();
 
                 try {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    InputStream input = getApplicationContext().getAssets().open(ci.uuid + ".vrtn");
+                    BufferedReader br = new BufferedReader(new InputStreamReader(input));
                     String line;
 
                     while ((line = br.readLine()) != null) {
@@ -110,30 +116,39 @@ public class MainActivity extends AppCompatActivity {
                     br.close();
                     getVariationCallback(text.toString());
                 }
-                catch (IOException e) {
+                catch (Exception e) {
                     //You'll need to add proper error handling here
+                    Toast toast1 = Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG);
+                    toast1.show();
                 }
+            }
+            if (images != null) {
+                GridView grid = (GridView) findViewById(R.id.gridView);
+                grid.setAdapter(new ImageAdapter(getApplicationContext(), images));
             }
         } catch (Exception ex) {
         }
     }
     public void getVariationCallback(String variationData) {
         try {
-            Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
-            toast.show();
-            JSONArray arr = new JSONArray(variationData);
+            //Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
+            //toast.show();
+            JSONObject arr = new JSONObject(variationData);
             // Get artwork data from variation
             Intent mArtworkIntent = new Intent(MainActivity.this, RetrieveArtworkIntentService.class);
-            JSONObject art = new JSONObject(arr.getJSONObject(0).get("art").toString());
-            mArtworkIntent.setData(Uri.parse(art.get("thumbnailImage").toString()));
+            JSONObject art = new JSONObject(arr.get("Art").toString());
+            mArtworkIntent.setData(Uri.parse(art.get("ThumbnailImage").toString()));
             MainActivity.this.startService(mArtworkIntent);
         } catch (Exception e)
         {
+            Toast toast = Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG);
+            toast.show();
         }
     }
     public void getArtworkCallback(Bitmap artData) {
-        ImageView img = (ImageView) findViewById(R.id.cardArt);
-        img.setImageBitmap(artData);
+        images.add(artData);
+        //ImageView img = (ImageView) findViewById(R.id.cardArt);
+        //img.setImageBitmap(artData);
     }
 
     @Override
