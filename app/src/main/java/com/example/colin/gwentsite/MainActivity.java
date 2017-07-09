@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                  * Intent's "data" field.
                  */
                 Intent mServiceIntent = new Intent(MainActivity.this, RetrieveCardsIntentService.class);
-                mServiceIntent.setData(Uri.parse(_baseUri + cardsEndpoint));
+                mServiceIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "?limit=30&offset=40"));
                 MainActivity.this.startService(mServiceIntent);
             }
         });
@@ -123,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (images != null) {
-                GridView grid = (GridView) findViewById(R.id.gridView);
-                grid.setAdapter(new ImageAdapter(getApplicationContext(), images));
+                GridView list = (GridView) findViewById(R.id.gridView);
+                list.setAdapter(new ImageAdapter(getApplicationContext(), images));
             }
         } catch (Exception ex) {
         }

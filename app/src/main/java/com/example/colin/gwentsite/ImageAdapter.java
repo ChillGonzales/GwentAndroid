@@ -3,6 +3,7 @@ package com.example.colin.gwentsite;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -34,8 +35,10 @@ public class ImageAdapter extends BaseAdapter {
     }
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
+        //LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
+            //convertView = layoutInflater.inflate(R.layout.)
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
