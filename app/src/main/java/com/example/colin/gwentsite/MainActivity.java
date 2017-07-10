@@ -1,10 +1,8 @@
 package com.example.colin.gwentsite;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,20 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     static MainActivity instance;
     private String _baseUri = "https://api.gwentapi.com/v0/";
     private String cardsEndpoint = "cards";
-    private String variationEndpoint = "variations";
     private JSONObject cardsJson = null;
     private ArrayList<Bitmap> images = new ArrayList<>();
 
@@ -63,11 +54,7 @@ public class MainActivity extends AppCompatActivity {
         getCardsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                /*
-                 * Creates a new Intent to start the RSSPullService
-                 * IntentService. Passes a URI in the
-                 * Intent's "data" field.
-                 */
+                // Start intent service for getting the page of cards
                 Intent mServiceIntent = new Intent(MainActivity.this, RetrieveCardsIntentService.class);
                 mServiceIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "?limit=30&offset=40"));
                 MainActivity.this.startService(mServiceIntent);
@@ -80,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getCardsCallback(String cardData) {
-        //Toast toast = Toast.makeText(getApplicationContext(), cardData, Toast.LENGTH_LONG);
-        //toast.show();
         try {
             cardsJson = new JSONObject(cardData);
             JSONArray cardArray = (JSONArray) cardsJson.get("results");
@@ -92,17 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 String[] split = card.get("href").toString().split("/");
                 CardInfo ci = new CardInfo(card.get("name").toString(), split[split.length - 1]);
 
-                // Get variation detail from card UUID
-                //Intent mVariationIntent = new Intent(MainActivity.this, RetrieveVariationIntentService.class);
-                //mVariationIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "/" + ci.uuid + "/" + variationEndpoint));
-                //MainActivity.this.startService(mVariationIntent);
-                //break;
-
-                //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                //URL url = classLoader.getResource("./src/main/assets/" + ci.uuid + ".info");
-                //File file = new File("C:\\Users\\Colin\\Documents\\src\\GwentSite\\app\\src\\main\\assets\\" + ci.uuid + ".vrtn");
-
-                //Read text from file
+                //Read variation data from assets file
                 StringBuilder text = new StringBuilder();
 
                 try {
@@ -128,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 list.setAdapter(new ImageAdapter(getApplicationContext(), images));
             }
         } catch (Exception ex) {
+            //TODO: Add proper error handling
         }
     }
     public void getVariationCallback(String variationData) {
