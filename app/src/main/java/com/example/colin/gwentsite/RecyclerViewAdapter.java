@@ -23,9 +23,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // inflates the cell layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        //TODO: Fix inflater code below
+        //View view = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        //ViewHolder viewHolder = new ViewHolder(view);
+        //return viewHolder;
+        return null;
     }
 
     // binds the data to the textview in each cell
