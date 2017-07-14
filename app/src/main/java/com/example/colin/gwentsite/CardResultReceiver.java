@@ -15,7 +15,7 @@ public class CardResultReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getExtras().get(Constants.CARD_PAGE_RESULT) != null) {
-            MainActivity.getInstance().getCardsCallback((String) intent.getExtras().get(Constants.CARD_PAGE_RESULT));
+            //MainActivity.getInstance().getCardsCallback((String) intent.getExtras().get(Constants.CARD_PAGE_RESULT));
         }
     }
 }

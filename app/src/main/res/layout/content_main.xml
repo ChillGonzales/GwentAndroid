@@ -7,7 +7,12 @@
     android:layout_height="match_parent"
     tools:showIn="@layout/activity_main"
     tools:context=".MainActivity">
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.example.colin.gwentsite.DashboardFragment"
+        android:id="@+id/dashboard"/>
 
     <!--<TextView
         android:id="@+id/descriptionText"

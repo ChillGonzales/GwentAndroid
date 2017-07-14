@@ -8,19 +8,13 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(artworkReceiver, resultFilter);
 
         //Setup click event
-        getCardsButton = (Button) findViewById(R.id.getCardsButton);
-        getCardsButton.setOnClickListener(new View.OnClickListener() {
+        //getCardsButton = (Button) findViewById(R.id.getCardsButton);
+        /*getCardsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 // Start intent service for getting the page of cards
@@ -59,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
                 mServiceIntent.setData(Uri.parse(_baseUri + cardsEndpoint + "?limit=30&offset=40"));
                 MainActivity.this.startService(mServiceIntent);
             }
-        });
+        });*/
     }
 
     public static MainActivity getInstance() {
         return instance;
     }
 
-    public void getCardsCallback(String cardData) {
+    /*public void getCardsCallback(String cardData) {
         try {
             cardsJson = new JSONObject(cardData);
             JSONArray cardArray = (JSONArray) cardsJson.get("results");
@@ -99,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (images != null) {
-                GridView list = (GridView) findViewById(R.id.gridView);
+                GridLayout list = (GridLayout) findViewById(R.id.gridLayout);
                 list.setAdapter(new ImageAdapter(getApplicationContext(), images));
             }
         } catch (Exception ex) {
             //TODO: Add proper error handling
         }
-    }
+    }*/
     public void getVariationCallback(String variationData) {
         try {
             //Toast toast = Toast.makeText(getApplicationContext(), variationData, Toast.LENGTH_LONG);
